@@ -618,12 +618,15 @@ var Repl = function(session, options) {
         var line = this.doc.getLine(row);
         var state = this.states[row - 1];
 
-        var cell = this.session.replCells[row];        
+        var cell = this.session.replCells[row];
         if (!cell && !state) {
-            cell = this.session.repl.getCellAt(row);            
+            cell = this.session.repl.getCellAt(row);
         }
         if (cell)
             state = cell.tokenizerState || cell.type;
+        
+        if (!this.tokenizer.regExps[state])
+            state = "start";
 
         var data = this.tokenizer.getLineTokens(line, state, row);
 
