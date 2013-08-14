@@ -742,6 +742,10 @@ var Repl = function(session, options) {
             var w = c && c.lineWidget;
             if (!w || !w.el) continue;
 
+            if (!w._inDocument) {
+                w._inDocument = true;
+                renderer.container.appendChild(w.el);
+            }
             var top = renderer.$cursorLayer.getPixelPosition({row: i, column:0}, true).top;
             if (!w.coverLine)
                 top += config.lineHeight * this.session.getRowLineCount(w.row);
