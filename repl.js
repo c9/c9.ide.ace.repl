@@ -33,7 +33,6 @@ define(function(require, exports, module) {
 "use strict";
 
 var dom = require("ace/lib/dom");
-var lang = require("ace/lib/lang");
 var Anchor = require("ace/anchor").Anchor;
 
 var HashHandler = require("ace/keyboard/hash_handler").HashHandler;
@@ -42,7 +41,7 @@ var comparePoints = Range.comparePoints;
 
 var ReplCell = require("./repl_cell").ReplCell;
 
-var css = require("ace/requirejs/text!./repl.css")
+var css = require("ace/requirejs/text!./repl.css");
 dom.importCssString(css, "ace_repl");
 
 
@@ -104,7 +103,7 @@ for (var key in replCommands.commands) {
 
 /******************************************************/
 var Repl = function(session, options) {
-    options = options || {}
+    options = options || {};
     this.history = new History();
     this.evaluator = options.evaluator || new Evaluator();
     this.session = session;
@@ -131,21 +130,20 @@ var Repl = function(session, options) {
     
 
     this.session.on("changeMode", function() {
-        var fm = session.$foldMode
         session.getFoldWidget = function(row) {
             if (!session.replCells[row])
                 return;
             if (session.replCells[row+1])
-                return
+                return;
             if (row == session.replCells.length-1)
-                return 
+                return;
             if (session.replCells[row].lineWidget)
                 return;
             return  "start";
-        }
+        };
         session.getFoldWidgetRange = function(row) {
             return session.repl.getCellAt(row).range;
-        }
+        };
         session.bgTokenizer.$tokenizeRow = session.repl.$tokenizeRow;
         session.bgTokenizer.session = session;
     });
@@ -154,7 +152,7 @@ var Repl = function(session, options) {
         if (this.lineWidgets)
             var h = this.lineWidgets[row] && this.lineWidgets[row].rowCount || 0;
         else 
-            h = 0
+            h = 0;
         if (!this.$useWrapMode || !this.$wrapData[row]) {
             return 1 + h;
         } else {
@@ -167,12 +165,11 @@ var Repl = function(session, options) {
         var screenRows = 0;
         this.lineWidgets.forEach(function(w){
             if (w && w.rowCount)
-                screenRows +=w.rowCount
+                screenRows +=w.rowCount;
         });
         return screenRows;
     };
     
-    session.getLine
     this.session.setMode(options.mode);
 
     this.$updateSession();
@@ -198,7 +195,6 @@ var Repl = function(session, options) {
             
         var oldMaxScrollTop = renderer.layerConfig.maxHeight
             - oldSize.scrollerHeight + renderer.scrollMargin.v;
-        var maxScrollTop = oldMaxScrollTop - dh;
         var scrollTop = session.getScrollTop();
         if (scrollTop > oldMaxScrollTop - renderer.layerConfig.lineHeight) {
             session.setScrollTop(scrollTop - dh);
@@ -211,7 +207,7 @@ var Repl = function(session, options) {
         this.$cursorChanged = false;
         var markDirty = function() {
             this.$cursorChanged = true;
-        }.bind(this)
+        }.bind(this);
         this.session.selection.on("changeSelection", markDirty);
         this.session.selection.on("changeCursor", markDirty);
     };
@@ -225,7 +221,7 @@ var Repl = function(session, options) {
             renderer.$cursorLayer.isVisible = visible;
             renderer.$cursorLayer.element.style.opacity = visible ? "" : "0";
         }
-    }
+    };
     
     this.onMouseUp = function(e) {
         var editor = e.editor;
@@ -255,7 +251,7 @@ var Repl = function(session, options) {
         if (command.isRepl)
             return;
         if (cell && cell.lineWidget) {
-            editor.repl.moveByCells(-1, cell)
+            editor.repl.moveByCells(-1, cell);
             e.preventDefault();
         }
         
@@ -266,8 +262,7 @@ var Repl = function(session, options) {
         }
         
         if (!cell)
-            return
-        
+            return;
         
         var op = editor.curReplOp;
 
@@ -290,24 +285,24 @@ var Repl = function(session, options) {
     this.afterCommand = function(e) {
         var editor = e.editor;
         var op = editor.curReplOp;
-        editor.curReplOp = null
-        editor.lastReplOp = op
+        editor.curReplOp = null;
+        editor.lastReplOp = op;
         if (!op)
             return;
-        var command = op.command
+        var command = op.command;
         if (op.clipSelection == "before") {
             setClipToRange(editor.selection.lead, false);
             setClipToRange(editor.selection.anchor, false);
         } else if (op.clipSelection == "after") {
-            var range = editor.selection.toOrientedRange()
+            var range = editor.selection.toOrientedRange();
             if (op.cell) {
-                range.clip(op.cell.getRange())
-                editor.selection.fromOrientedRange(range)
+                range.clip(op.cell.getRange());
+                editor.selection.fromOrientedRange(range);
             }
         }
         
         if (!command.readOnly && !command.isRepl)
-            editor.repl.ensureLastInputCell()
+            editor.repl.ensureLastInputCell();
     };
     
     this.attach = function(editor) {
@@ -330,14 +325,14 @@ var Repl = function(session, options) {
         
         editor.repl = this;
 
-        editor.setOption("enableLineWidgets", true)
+        editor.setOption("enableLineWidgets", true);
         editor.renderer.on("beforeRender", this.measureWidgets);
         editor.renderer.on("afterRender", this.updateWidgets);
         editor.renderer.on("afterRender", this._updateCursorVisibility);
         editor.renderer.on("resize", this._replResize);
     };
     this.detach = function(e) {
-        console.log("detach", this.session.getLength(), e)
+        console.log("detach", this.session.getLength(), e);
         if (e && e.session == this.session)
             return; // sometimes attach can be called before setSession
         var editor = this.editor;
@@ -409,11 +404,11 @@ var Repl = function(session, options) {
         if (!cell)
             return;
         cell.row = i;
-        for (var i = pos.row+1, l = this.session.getLength(); i < l; i++) {
+        for (var i = pos.row + 1, l = this.session.getLength(); i < l; i++) {
             if (cells[i])
                 break;
         }
-        cell.endRow = Math.min(i-1, l-1);
+        cell.endRow = Math.min(i - 1, l - 1);
         cell.range = new Range(cell.row, 0, cell.endRow, Number.MAX_VALUE);
         return cell;
     };
@@ -432,7 +427,7 @@ var Repl = function(session, options) {
         if (!type || cell.type == type)
             return cell;
         return this.getSiblingCell(dir, cell, type);
-    }
+    };
     
     this.moveByCells = function(dir, cell, type) {
         if (dir == "first")
@@ -444,20 +439,20 @@ var Repl = function(session, options) {
         
         if (cell)
             return this.select(cell.range.end);    
-    }
+    };
     
     this.getFirstCell = function(type) {
-        var cell = this.getCellAt(0)
+        var cell = this.getCellAt(0);
         if (type && cell.type != type)
-            return this.getSiblingCell(1, cell, type)
+            return this.getSiblingCell(1, cell, type);
         return cell;
-    }
+    };
     this.getLastCell = function(type) {
-        var cell = this.getCellAt(null)
+        var cell = this.getCellAt(null);
         if (type && cell.type != type)
-            return this.getSiblingCell(-1, cell, type)
+            return this.getSiblingCell(-1, cell, type);
         return cell;
-    }
+    };
     
     this.removeOutputCell = function(cell)  {
         cell = cell || this.getCurrentCell();
@@ -465,27 +460,27 @@ var Repl = function(session, options) {
             cell = cell.output;
         if (cell) 
             this.removeCell(cell);
-    }
+    };
     
     this.removeCell = function(cell)  {
         var range = cell.getRange().clone();
         range.start.row--;
         range.start.column = this.session.getLine(range.start.row).length;
         this.session.replace(range, "");
-    }
+    };
     
     this.clear = function() {
         this.session.setValue("");
         this.ensureLastInputCell();
-    }
+    };
     
     this.ensureLastInputCell = function() {
         var end = {row: this.session.getLength(), column: 0};
         var cell = this.getCellAt(end);
         if (!cell || cell.type != "input") {
-            this.insertCell(end, {type: "input"}, true)
+            this.insertCell(end, {type: "input"}, true);
         }
-    }
+    };
     
     this.select = function(pos) {   
         var sel = this.session.selection;
@@ -494,7 +489,7 @@ var Repl = function(session, options) {
                 sel.toSingleRange();
             sel.setRange(Range.fromPoints(pos, pos));
         }
-    }
+    };
 
     this.eval = function(force) {
         var cell = this.getCurrentCell();
@@ -508,7 +503,7 @@ var Repl = function(session, options) {
             
             if (!cell.output || !cell.output.session) {
                 cell.output = this.insertCell(cell.range.end, {type: "output"});                
-                var newCell = this.getSiblingCell(1, cell.output)                
+                var newCell = this.getSiblingCell(1, cell.output);
             }
             this.history.add(str);
             cell.output.waiting = true;
@@ -524,7 +519,7 @@ var Repl = function(session, options) {
                 renderer.scrollSelectionIntoView(cell.range.end, cell.range.start);
                 renderer.scrollCursorIntoView();
             });
-            if (success != false && newCell && newCell.type != "input") {
+            if (success !== false && newCell && newCell.type != "input") {
                 newCell = this.insertCell(cell.output.range.end, {type: "input"});
                 this.session.selection.setRange(newCell.range);
             }
@@ -590,8 +585,8 @@ var Repl = function(session, options) {
         session.addGutterDecoration(0, session.$decorations[0]);
         
         session.lineWidgets = session.replCells.map(function(c) {
-            return c && c.lineWidget
-        })
+            return c && c.lineWidget;
+        });
     };
 
     this.updateCellsOnChange = function(e) {
@@ -647,13 +642,13 @@ var Repl = function(session, options) {
     };
 
     this.addLineWidget = function(w) {
-        var renderer = this.editor.renderer
+        var renderer = this.editor.renderer;
         if (w.html && !w.el) {
             w.el = dom.createElement("div");
             w.el.innerHTML = w.html;
         }
         if (w.el) {
-            dom.addCssClass(w.el, "ace_lineWidgetContainer")
+            dom.addCssClass(w.el, "ace_lineWidgetContainer");
             renderer.container.appendChild(w.el);
             w._inDocument = true;
         }
@@ -662,7 +657,7 @@ var Repl = function(session, options) {
             w.el.style.zIndex = 3;
         }
         if (!w.pixelHeight) {
-            w.pixelHeight = w.el.offsetHeight
+            w.pixelHeight = w.el.offsetHeight;
         }
         if (w.rowCount == null)
             w.rowCount = Math.ceil(w.pixelHeight / renderer.layerConfig.lineHeight);
@@ -688,7 +683,7 @@ var Repl = function(session, options) {
     this.onWidgetChanged = function(w) {
         this.session._changedWidgets.push(w);
         this.editor && this.editor.renderer.updateFull();
-    }
+    };
     
     this.measureWidgets = function(e, renderer) {
         var ws = this.session._changedWidgets;
@@ -706,7 +701,7 @@ var Repl = function(session, options) {
             w.h = w.el.offsetHeight;
             
             if (!w.fixedWidth) {
-                w.w = w.el.offsetWidth;            
+                w.w = w.el.offsetWidth;
                 w.screenWidth = Math.ceil(w.w / config.characterWidth);
             }
             
@@ -724,11 +719,11 @@ var Repl = function(session, options) {
             this.session._emit("changeFold", {data:{start:{row: min}}});
             this.session.lineWidgetWidth = null;
         }
-        this.session._changedWidgets = []
+        this.session._changedWidgets = [];
     };
     
     this.updateWidgets = function(e, renderer) {
-        var config = renderer.layerConfig
+        var config = renderer.layerConfig;
         var cells = this.session.replCells;
         if (!cells)
             return;
@@ -740,10 +735,10 @@ var Repl = function(session, options) {
         
         this.firstRow = config.firstRow;
         this.lastRow = config.lastRow;
-                
+
         renderer.$cursorLayer.config = config;
         for (var i = first; i <= last; i++) {
-            var c = cells[i]
+            var c = cells[i];
             var w = c && c.lineWidget;
             if (!w || !w.el) continue;
 
@@ -848,9 +843,6 @@ function setClipToRange(anchor, range) {
 
 
 // dummy example
-var Renderer = require("ace/virtual_renderer").VirtualRenderer;
-var Editor = require("ace/editor").Editor;
-
 var Evaluator = function() {
 };
 
@@ -860,7 +852,7 @@ var Evaluator = function() {
     };
 
     this.evaluate = function(str, cell, cb) {
-        cb("evaluator is missing!")
+        cb("evaluator is missing!");
     };
 }).call(Evaluator.prototype);
 
@@ -871,8 +863,8 @@ Repl.fromEditor = function(editor, options) {
     repl.attach(editor);
     
     editor.setOption("showPrintMargin", false);
-    return repl
+    return repl;
 };
-exports.Repl = Repl
+exports.Repl = Repl;
 
 });
