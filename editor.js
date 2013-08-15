@@ -26,10 +26,14 @@ define(function(require, exports, module) {
             var plugin = new Baseclass(true, []);
             // var emit   = plugin.getEmitter();
             
+            var currentSession;
             var ace;
             
             plugin.on("draw", function(e){
                 ace = plugin.ace;
+                
+                if (currentSession)
+                    currentSession.repl.attach(ace);
             })
             
             /***** Method *****/
@@ -51,7 +55,9 @@ define(function(require, exports, module) {
                 });
             });
             plugin.on("document.activate", function(e){
-                e.doc.getSession().repl.attach(ace);
+                currentSession = e.doc.getSession();
+                if (ace) 
+                    currentSession.repl.attach(ace);
             });
             plugin.on("document.unload", function(e){
                 var session = e.doc.getSession();
