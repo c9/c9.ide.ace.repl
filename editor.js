@@ -43,7 +43,7 @@ define(function(require, exports, module) {
             plugin.on("load", function(){
             });
             
-            plugin.on("document.load", function(e){
+            plugin.on("documentLoad", function(e){
                 var session = e.doc.getSession();
                 
                 if (session.repl) return;
@@ -54,12 +54,12 @@ define(function(require, exports, module) {
                     message   : e.state.message
                 });
             });
-            plugin.on("document.activate", function(e){
+            plugin.on("documentActivate", function(e){
                 currentSession = e.doc.getSession();
                 if (ace) 
                     currentSession.repl.attach(ace);
             });
-            plugin.on("document.unload", function(e){
+            plugin.on("documentUnload", function(e){
                 var session = e.doc.getSession();
                 session.repl.detach();
                 delete session.repl;
