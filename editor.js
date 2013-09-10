@@ -64,9 +64,9 @@ define(function(require, exports, module) {
                 session.repl.detach();
                 delete session.repl;
             });
-            plugin.on("state.get", function(e){
+            plugin.on("getState", function(e){
             });
-            plugin.on("state.set", function(e){
+            plugin.on("setState", function(e){
             });
             plugin.on("clear", function(){
             });
