@@ -277,8 +277,9 @@ var Repl = function(session, options) {
         }
 
         if (op.clipSelection == "before") {
-            setClipToRange(editor.selection.lead, cell.range);
-            setClipToRange(editor.selection.anchor, cell.range);
+            var range = cell.getRange();
+            setClipToRange(editor.selection.lead, range);
+            setClipToRange(editor.selection.anchor, range);
         }
     };
 
@@ -409,7 +410,8 @@ var Repl = function(session, options) {
                 break;
         }
         cell.endRow = Math.min(i - 1, l - 1);
-        cell.range = new Range(cell.row, 0, cell.endRow, Number.MAX_VALUE);
+        var col = cell.prompt.length;
+        cell.range = new Range(cell.row, col, cell.endRow, Number.MAX_VALUE);
         return cell;
     };
     
@@ -528,6 +530,9 @@ var Repl = function(session, options) {
             }
         } else
             this.editor.insert("\n");
+        
+        if (this.evaluator.afterEvaluate)
+            this.evaluator.afterEvaluate(cell, newCell);
     };
     this.insertCell = function(pos, options, allowSplit) {
         pos = pos || this.session.selection.getCursor();
@@ -617,8 +622,13 @@ var Repl = function(session, options) {
     this.$tokenizeRow = function(row) {
         var line = this.doc.getLine(row);
         var state = this.states[row - 1];
-
+        var prompt = "";
+        
         var cell = this.session.replCells[row];
+        if (cell && cell.prompt) {
+            prompt = cell.prompt;
+            line = line.substr(prompt.length);
+        }
         if (!cell && !state) {
             cell = this.session.repl.getCellAt(row);
         }
@@ -641,6 +651,13 @@ var Repl = function(session, options) {
         }
         if (this.session.repl.onTokenizeRow)
             data.tokens = this.session.repl.onTokenizeRow(row, data.tokens) || data.tokens;
+        
+        if (prompt) {
+            data.tokens.unshift({
+                type: cell.promptType || "repl-prompt-text",
+                value: prompt
+            });
+        }
         return this.lines[row] = data.tokens;
     };
 
