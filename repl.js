@@ -231,10 +231,14 @@ var Repl = function(session, options) {
             var sel = editor.selection;
             if (sel.isEmpty() && !sel.rangeCount) {
                 var cell = editor.repl.getCurrentCell();
-                if (cell.type != "input") {
-                        cell = editor.repl.getSiblingCell(1, cell, "input");
-                        if (cell)
-                            editor.repl.select(cell.range.end);
+                if (!cell) {
+                    var cell = editor.repl.getCellAt(sel.lead);
+                    if (cell)
+                        editor.repl.select(cell.range.start);
+                } else if (cell.type != "input") {
+                    cell = editor.repl.getSiblingCell(1, cell, "input");
+                    if (cell)
+                        editor.repl.select(cell.range.end);
                 }
             }
         }, 250);
@@ -493,8 +497,8 @@ var Repl = function(session, options) {
         }
     };
 
-    this.eval = function(force) {
-        var cell = this.getCurrentCell();
+    this.eval = function(force, cell) {
+        cell = cell || this.getCurrentCell();
         if (!cell)
             return;
         if (!force && cell.type != "input")
