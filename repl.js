@@ -326,7 +326,7 @@ var Repl = function(session, options) {
         
         editor.repl = this;
 
-        editor.setOption("enableLineWidgets", true);
+        // editor.setOption("enableLineWidgets", true);
         editor.renderer.on("beforeRender", this.measureWidgets);
         editor.renderer.on("afterRender", this.updateWidgets);
         editor.renderer.on("afterRender", this._updateCursorVisibility);
