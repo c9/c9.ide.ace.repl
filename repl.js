@@ -231,14 +231,10 @@ var Repl = function(session, options) {
             var sel = editor.selection;
             if (sel.isEmpty() && !sel.rangeCount) {
                 var cell = editor.repl.getCurrentCell();
-                if (!cell) {
-                    var cell = editor.repl.getCellAt(sel.lead);
-                    if (cell)
-                        editor.repl.select(cell.range.start);
-                } else if (cell.type != "input") {
-                    cell = editor.repl.getSiblingCell(1, cell, "input");
-                    if (cell)
-                        editor.repl.select(cell.range.end);
+                if (cell.type != "input") {
+                        cell = editor.repl.getSiblingCell(1, cell, "input");
+                        if (cell)
+                            editor.repl.select(cell.range.end);
                 }
             }
         }, 250);
@@ -414,8 +410,7 @@ var Repl = function(session, options) {
                 break;
         }
         cell.endRow = Math.min(i - 1, l - 1);
-        var col = cell.prompt.length;
-        cell.range = new Range(cell.row, col, cell.endRow, Number.MAX_VALUE);
+        cell.range = new Range(cell.row, 0, cell.endRow, Number.MAX_VALUE);
         return cell;
     };
     
@@ -626,13 +621,8 @@ var Repl = function(session, options) {
     this.$tokenizeRow = function(row) {
         var line = this.doc.getLine(row);
         var state = this.states[row - 1];
-        var prompt = "";
-        
+
         var cell = this.session.replCells[row];
-        if (cell && cell.prompt) {
-            prompt = cell.prompt;
-            line = line.substr(prompt.length);
-        }
         if (!cell && !state) {
             cell = this.session.repl.getCellAt(row);
         }
@@ -655,13 +645,6 @@ var Repl = function(session, options) {
         }
         if (this.session.repl.onTokenizeRow)
             data.tokens = this.session.repl.onTokenizeRow(row, data.tokens) || data.tokens;
-        
-        if (prompt) {
-            data.tokens.unshift({
-                type: cell.promptType || "repl-prompt-text",
-                value: prompt
-            });
-        }
         return this.lines[row] = data.tokens;
     };
 

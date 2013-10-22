@@ -109,11 +109,3 @@
     position: absolute;
 
 }
-
-.ace_repl-prompt-text {
-    color: #145683;
-    background-color: rgba(204, 215, 218, 0.16);
-}
-.ace_dark .ace_repl_prompt {
-    
-}

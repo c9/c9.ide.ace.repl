@@ -44,7 +44,6 @@ var ReplCell = function(options, session) {
 };
 
 (function() {
-    
     this.insert = function(pos, text) {
         if (typeof pos == "string") {
             text = pos;
@@ -70,11 +69,7 @@ var ReplCell = function(options, session) {
             return;
         this.promptType = type;
         var pos = this.getRange().start;
-        if (this.prompt.length)
-            this.session.remove(new Range(pos.row, 0, pos.row, pos.column))
         this.prompt = str || "";
-        this.session.insert({row: pos.row, column: 0}, this.prompt);
-        this.$updateRange();
     };
     
     this.setValue = function(val, selection) {
@@ -119,8 +114,7 @@ var ReplCell = function(options, session) {
                 break;
         }
         cell.endRow = i-1;
-        var col = cell.prompt.length;
-        cell.range = new Range(cell.row, col, cell.endRow, Number.MAX_VALUE);
+        cell.range = new Range(cell.row, 0, cell.endRow, Number.MAX_VALUE);
         
         return this.range;
     };
