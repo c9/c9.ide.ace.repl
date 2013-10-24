@@ -232,8 +232,8 @@ var Repl = function(session, options) {
         this.$cursorChanged = false;
         var cell = this.getCurrentCell();
         var visible = cell && cell.type === "input";
-        if (visible != renderer.$cursorLayer.isVisible) {
-            renderer.$cursorLayer.isVisible = visible;
+        if (visible != renderer.$cursorLayer.inEditableCell) {
+            renderer.$cursorLayer.inEditableCell = visible;
             renderer.$cursorLayer.element.style.opacity = visible ? "" : "0";
         }
     };

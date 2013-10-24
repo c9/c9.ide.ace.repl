@@ -1,4 +1,4 @@
-﻿/* ***** BEGIN LICENSE BLOCK *****
+/* ***** BEGIN LICENSE BLOCK *****
  * Distributed under the BSD license:
  *
  * Copyright (c) 2010, Ajax.org B.V.
@@ -68,8 +68,8 @@ var ReplCell = function(options, session) {
         if (this.prompt == str)
             return;
         this.promptType = type;
-        var pos = this.getRange().start;
         this.prompt = str || "";
+        this.session.maxPromptLength = Math.max(this.session.maxPromptLength||0, this.prompt.length);
     };
     
     this.setValue = function(val, selection) {

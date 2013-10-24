@@ -36,7 +36,7 @@
     margin-top: -2px;
 }
 .ace_gutter-cell.repl_prompt {
-    color: transparent;
+    padding-left: 1px;
 }
 .ace_gutter-cell.repl_output:after {
     color: rgb(66, 177, 8);
