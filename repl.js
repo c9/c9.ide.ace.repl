@@ -170,6 +170,8 @@ var Repl = function(session, options) {
         return screenRows;
     };
     
+    session.gutterRenderer = this.gutterRenderer;
+    
     this.session.setMode(options.mode);
 
     this.$updateSession();
@@ -198,6 +200,19 @@ var Repl = function(session, options) {
         var scrollTop = session.getScrollTop();
         if (scrollTop > oldMaxScrollTop - renderer.layerConfig.lineHeight) {
             session.setScrollTop(scrollTop - dh);
+        }
+    };
+    
+    this.gutterRenderer = {
+        getText: function(session, row) {
+            var cell = session.replCells[row];
+            if (cell)
+                return cell.prompt || "";
+            return row + "";
+        },
+        getWidth: function(session, lastLineNumber, config) {
+            var chars = Math.max(lastLineNumber.toString().length, session.maxPromptLength||0);
+            return chars * config.characterWidth;
         }
     };
     
