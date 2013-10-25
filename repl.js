@@ -396,11 +396,11 @@ var Repl = function(session, options) {
             cell.setValue(val, dir);
         }
     };
-    this.getCurrentCell = function() {
+    this.getCurrentCell = function(returnAdjacent) {
         var range = this.editor.getSelectionRange();
         var cell = this.getCellAt(range.start);
 
-        if (cell && cell.range.contains(range.end.row, range.end.column)) {
+        if (returnAdjacent || cell && cell.range.contains(range.end.row, range.end.column)) {
             return cell;
         }
     };
