@@ -68,7 +68,7 @@ var ReplCell = function(options, session) {
         if (this.prompt == str)
             return;
         this.promptType = type;
-        this.prompt = str || "";
+        this.prompt = (str || "") + "  ";
         this.session.maxPromptLength = Math.max(this.session.maxPromptLength||0, this.prompt.length);
     };
     
@@ -97,7 +97,7 @@ var ReplCell = function(options, session) {
         return this.range;
     };
     this.$updateRange = function(row) {
-        var cells = this.session.replCells
+        var cells = this.session.replCells;
         if (row == null)
             row = cells.indexOf(this);
 
@@ -131,7 +131,7 @@ var ReplCell = function(options, session) {
         if (this.lineWidget)
             this.removeWidget();
         
-        this.setValue("")
+        this.setValue("");
         options.row = this.range.end.row;
         this.lineWidget = options;
         this.session.repl.addLineWidget(this.lineWidget);
@@ -140,11 +140,12 @@ var ReplCell = function(options, session) {
     this.destroy = function() {
         this.removeWidget();
         this.session = null;
-    }
+    };
     
     this.remove = function() {
-        this.session.repl.removeCell(this);
-    }
+        if (this.session)
+            this.session.repl.removeCell(this);
+    };
  
 }).call(ReplCell.prototype);
 
