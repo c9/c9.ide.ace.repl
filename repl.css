@@ -109,3 +109,7 @@
     position: absolute;
 
 }
+
+.ace_repl_error{
+    color: rgb(245, 12, 12);
+}
