@@ -682,7 +682,7 @@ var Repl = function(session, options) {
             w.pixelHeight = w.el.offsetHeight;
         }
         if (w.rowCount == null)
-            w.rowCount = Math.ceil(w.pixelHeight / renderer.layerConfig.lineHeight);
+            w.rowCount = w.pixelHeight / renderer.layerConfig.lineHeight;
         
         this.session._emit("changeFold", {data:{start:{row: w.row}}});
         
@@ -727,7 +727,7 @@ var Repl = function(session, options) {
                 w.screenWidth = Math.ceil(w.w / config.characterWidth);
             }
             
-            var rowCount = Math.ceil(w.h / config.lineHeight);
+            var rowCount = w.h / config.lineHeight;
             if (w.coverLine)
                 rowCount -= this.session.getRowLineCount(w.row);
                 
