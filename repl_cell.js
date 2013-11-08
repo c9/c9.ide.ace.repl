@@ -68,7 +68,7 @@ var ReplCell = function(options, session) {
         if (this.prompt == str)
             return;
         this.promptType = type;
-        this.prompt = (str || "") + "  ";
+        this.prompt = (str || "") + "   ";
         this.session.maxPromptLength = Math.max(this.session.maxPromptLength||0, this.prompt.length);
     };
     
