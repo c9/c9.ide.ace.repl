@@ -113,3 +113,7 @@
 .ace_repl_error{
     color: rgb(245, 12, 12);
 }
+
+.ace_repl_warning{
+    color: #d65e0d;
+}
