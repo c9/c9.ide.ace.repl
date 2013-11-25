@@ -641,11 +641,11 @@ var Repl = function(session, options) {
         if (!cell && !state) {
             cell = this.session.repl.getCellAt(row);
         }
-        if (cell)
+        if (cell) {
             state = cell.tokenizerState || cell.type;
-        
-        if (!this.tokenizer.regExps[state])
-            state = "start";
+            if (!this.tokenizer.regExps[state])
+                state = "start";
+        }
 
         var data = this.tokenizer.getLineTokens(line, state, row);
 
