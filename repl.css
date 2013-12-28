@@ -85,7 +85,6 @@
 }
 
 .repl_lineWidgetContainer {
-    position: absolute;
     z-index: 5;
     position: absolute;
     background: rgba(247, 247, 247, 0.59);
