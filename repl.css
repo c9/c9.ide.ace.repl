@@ -84,7 +84,7 @@
     color: transparent;
 }
 
-.ace_lineWidgetContainer {
+.repl_lineWidgetContainer {
     position: absolute;
     z-index: 5;
     position: absolute;
@@ -92,7 +92,7 @@
     border: 1px solid rgb(128, 128, 128);
     //box-shadow: 0 0px 4px rgb(128, 128, 128) inset;    
 }
-.ace_lineWidgetContainer:before {
+.repl_lineWidgetContainer:before {
     content: "";
     top:0;
     background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.1), transparent);
@@ -100,7 +100,7 @@
     width: 100%;
     position: absolute;
 }
-.ace_lineWidgetContainer:after {
+.repl_lineWidgetContainer:after {
     content: "";
     bottom:0;
     background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.1), transparent);
