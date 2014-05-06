@@ -163,7 +163,7 @@ var Repl = function(session, options) {
 
     session.$getWidgetScreenLength = function() {
         var screenRows = 0;
-        this.lineWidgets.forEach(function(w){
+        this.lineWidgets.forEach(function(w) {
             if (w && w.rowCount)
                 screenRows +=w.rowCount;
         });
@@ -383,9 +383,9 @@ var Repl = function(session, options) {
         if (!cell || cell.type != "input")
             return false;
         var row = this.editor.getCursorPosition().row;
-        if(dir == 1 && cell.range.end.row != row)
+        if (dir == 1 && cell.range.end.row != row)
             return false;
-        else if(dir == -1 && cell.range.start.row != row)
+        else if (dir == -1 && cell.range.start.row != row)
             return false;
         var val = cell.getValue();
         val = this.history.navigateList(dir == -1 ? "prev" : "next", val);
@@ -697,7 +697,7 @@ var Repl = function(session, options) {
             w.el.parentNode.removeChild(w.el);
         if (w.editor && w.editor.destroy) try {
             w.editor.destroy();
-        } catch(e){}
+        } catch (e) {}
         this.session._emit("changeFold", {data:{start:{row: w.row}}});
         this.$updateSession();
     };
@@ -804,7 +804,7 @@ History.prototype = {
         this._tempData[-1] = "";
         return this._data;
     },
-    navigateList: function(type, value){
+    navigateList: function(type, value) {
         var lines = this._data;
         if (value && (lines[this.position] != value)) {
             this._tempData[this.position] = value;

@@ -10,12 +10,12 @@ define(function(require, exports, module) {
     return main;
 
     function main(options, imports, register) {
-        var editors  = imports.editors;
+        var editors = imports.editors;
         var settings = imports.settings;
         
         var Repl = require("./repl").Repl;
         
-        var counter  = 0;
+        var counter = 0;
         
         /***** Initialization *****/
         
@@ -24,12 +24,12 @@ define(function(require, exports, module) {
         function ReplEditor(){
             var Baseclass = editors.findEditor("ace")
             var plugin = new Baseclass(true, []);
-            // var emit   = plugin.getEmitter();
+            // var emit = plugin.getEmitter();
             
             var currentSession;
             var ace;
             
-            plugin.on("draw", function(e){
+            plugin.on("draw", function(e) {
                 ace = plugin.ace;
                 
                 if (currentSession)
@@ -43,30 +43,30 @@ define(function(require, exports, module) {
             plugin.on("load", function(){
             });
             
-            plugin.on("documentLoad", function(e){
+            plugin.on("documentLoad", function(e) {
                 var session = e.doc.getSession();
                 
                 if (session.repl) return;
                 
                 session.repl = new Repl(session.session, {
-                    mode      : e.state.mode,
-                    evaluator : e.state.evaluator,
-                    message   : e.state.message
+                    mode: e.state.mode,
+                    evaluator: e.state.evaluator,
+                    message: e.state.message
                 });
             });
-            plugin.on("documentActivate", function(e){
+            plugin.on("documentActivate", function(e) {
                 currentSession = e.doc.getSession();
                 if (ace) 
                     currentSession.repl.attach(ace);
             });
-            plugin.on("documentUnload", function(e){
+            plugin.on("documentUnload", function(e) {
                 var session = e.doc.getSession();
                 session.repl.detach();
                 delete session.repl;
             });
-            plugin.on("getState", function(e){
+            plugin.on("getState", function(e) {
             });
-            plugin.on("setState", function(e){
+            plugin.on("setState", function(e) {
             });
             plugin.on("clear", function(){
             });

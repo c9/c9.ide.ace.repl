@@ -1,4 +1,4 @@
-﻿/* ***** BEGIN LICENSE BLOCK *****
+/* ***** BEGIN LICENSE BLOCK *****
  * Distributed under the BSD license:
  *
  * Copyright (c) 2010, Ajax.org B.V.
@@ -48,7 +48,7 @@ var Evaluator = function() {
             cb("")
             var editor = new Editor(new Renderer)
             editor.setValue("command " + str)
-            editor.container.addEventListener("mousedown", function(e){
+            editor.container.addEventListener("mousedown", function(e) {
                 e.stopPropagation()
             })
             cell.addWidget({rowCount: 8, el:editor.container, editor: editor})
@@ -64,7 +64,7 @@ var Evaluator = function() {
                 message: "welcome to inner Repl!"
             })
 
-            editor.container.addEventListener("mousedown", function(e){
+            editor.container.addEventListener("mousedown", function(e) {
                 e.stopPropagation()
             })
             cell.addWidget({rowCount: 12, el:editor.container, editor: editor})
