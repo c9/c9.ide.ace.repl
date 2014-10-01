@@ -5,24 +5,22 @@
  * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
  */
 define(function(require, exports, module) {
-    main.consumes = ["editors", "settings"];
+    main.consumes = ["Plugin", "editors"];
     main.provides = ["ace.repl"];
     return main;
 
     function main(options, imports, register) {
+        var Plugin = imports.Plugin;
         var editors = imports.editors;
-        var settings = imports.settings;
         
         var Repl = require("./repl").Repl;
-        
-        var counter = 0;
         
         /***** Initialization *****/
         
         var extensions = [];
                           
         function ReplEditor(){
-            var Baseclass = editors.findEditor("ace")
+            var Baseclass = editors.findEditor("ace");
             var plugin = new Baseclass(true, []);
             // var emit = plugin.getEmitter();
             
@@ -34,7 +32,7 @@ define(function(require, exports, module) {
                 
                 if (currentSession)
                     currentSession.repl.attach(ace);
-            })
+            });
             
             /***** Method *****/
             
@@ -88,7 +86,7 @@ define(function(require, exports, module) {
                 
             });
             
-            plugin.load("ace.repl" + counter++);
+            plugin.load(Plugin.uid("ace.repl"));
             
             return plugin;
         }
