@@ -5,12 +5,11 @@
  * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
  */
 define(function(require, exports, module) {
-    main.consumes = ["Plugin", "editors"];
+    main.consumes = ["editors"];
     main.provides = ["ace.repl"];
     return main;
 
     function main(options, imports, register) {
-        var Plugin = imports.Plugin;
         var editors = imports.editors;
         
         var Repl = require("./repl").Repl;
@@ -86,7 +85,7 @@ define(function(require, exports, module) {
                 
             });
             
-            plugin.load(Plugin.uid("ace.repl"));
+            plugin.load(null, "ace.repl");
             
             return plugin;
         }
