@@ -608,9 +608,11 @@ var Repl = function(session, options) {
         });
     };
 
-    this.updateCellsOnChange = function(delta) {
-        var startRow = delta.start.row;
-        var len = delta.end.row - startRow;
+    this.updateCellsOnChange = function(e) {
+        var delta = e.data;
+        var range = delta.range;
+        var startRow = range.start.row;
+        var len = range.end.row - startRow;
 
         var cells = this.session.replCells;
         if (len === 0) {
