@@ -615,7 +615,7 @@ var Repl = function(session, options) {
         var cells = this.session.replCells;
         if (len === 0) {
             
-        } else if (delta.action == "removeText" || delta.action == "removeLines") {
+        } else if (delta.action == "remove") {
             var removed = cells.splice(startRow + 1, len);
             removed.forEach(function(cell) {
                 if (cell) {
