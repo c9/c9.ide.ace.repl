@@ -9,14 +9,12 @@
         "url": "http://github.com/c9/c9.ide.ace.repl.git"
     },
     "plugins": {
-        "plugin": {
-            "editor": {}
-        }
+        "editor": {}
     },
     "categories": [
         "core"
     ],
     "licenses": [
-        ""
+        "MIT"
     ]
 }
