@@ -59,7 +59,7 @@ var replCommands = new HashHandler([{
     name: "evalOrNewLine",
     bindKey: "Return",
     exec: function(editor) {return editor.repl.eval();},
-    scrollIntoView: "center-animate"
+    scrollIntoView: "cursor"
 }, {
     name: "down",
     bindKey: "down",
@@ -259,9 +259,13 @@ var Repl = function(session, options) {
             if (sel.isEmpty() && !sel.rangeCount) {
                 var cell = editor.repl.getCurrentCell();
                 if (cell.type != "input") {
+                    var r = cell.getRange();
+                    if (r && (sel.lead.row - r.start.row) / (r.end.row - r.start.row) < 0.1)
+                        cell = editor.repl.getSiblingCell(-1, cell, "input");
+                    if (!cell)
                         cell = editor.repl.getSiblingCell(1, cell, "input");
-                        if (cell)
-                            editor.repl.select(cell.range.end);
+                    if (cell)
+                        editor.repl.select(cell.range.end);
                 }
             }
         }, 250);
@@ -305,6 +309,7 @@ var Repl = function(session, options) {
 
         if (op.clipSelection == "before") {
             var range = cell.getRange();
+            editor.repl.$trackedRange = range;
             setClipToRange(editor.selection.lead, range);
             setClipToRange(editor.selection.anchor, range);
         }
@@ -328,7 +333,7 @@ var Repl = function(session, options) {
                 editor.selection.fromOrientedRange(range);
             }
         }
-        
+        editor.repl.$trackedRange = null;
         if (!command.readOnly && !command.isRepl)
             editor.repl.ensureLastInputCell();
     };
@@ -623,7 +628,8 @@ var Repl = function(session, options) {
     this.updateCellsOnChange = function(delta) {
         var startRow = delta.start.row;
         var len = delta.end.row - startRow;
-
+        
+        var range = this.$trackedRange;
         var cells = this.session.replCells;
         if (len === 0) {
             
@@ -634,10 +640,18 @@ var Repl = function(session, options) {
                     cell.destroy();
                 }
             });
+            if (range && range.start.row <= startRow && range.end.row >= startRow) {
+                this.$trackedRange.end.row = Math.max(this.$trackedRange.end.row - len, this.$trackedRange.start.row);
+            }
+            if (cells.length <= 1)
+                this.ensureLastInputCell();
         } else {
             var args = Array(len);
             args.unshift(startRow + 1, 0);
             cells.splice.apply(cells, args);
+            if (range && range.start.row <= startRow && range.end.row >= startRow) {
+                this.$trackedRange.end.row += len;
+            }
         }
         this.$updateSession();
         this.session._signal("updateCells");
