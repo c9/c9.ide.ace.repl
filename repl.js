@@ -48,51 +48,63 @@ dom.importCssString(css, "ace_repl");
 var replCommands = new HashHandler([{
     name: "newLine",
     bindKey: {win: "Shift-Return|Alt-Enter", mac: "Shift-Return|Alt-Enter"},
-    exec: function(editor) {editor.insert("\n");}
+    exec: function(editor) {editor.insert("\n");},
+    scrollIntoView: "cursor"
 }, {
     name: "eval",
     bindKey: "Ctrl-Return|Cmd-Return",
-    exec: function(editor) {return editor.repl.eval(true);}
+    exec: function(editor) {return editor.repl.eval(true);},
+    scrollIntoView: "cursor"
 }, {
     name: "evalOrNewLine",
     bindKey: "Return",
-    exec: function(editor) {return editor.repl.eval();}
+    exec: function(editor) {return editor.repl.eval();},
+    scrollIntoView: "center-animate"
 }, {
     name: "down",
     bindKey: "down",
-    exec: function(editor) {return editor.repl.navigateHistory(1);}
+    exec: function(editor) {return editor.repl.navigateHistory(1);},
+    scrollIntoView: "center-animate"
 }, {
     name: "up",
     bindKey: "up",
-    exec: function(editor) {return editor.repl.navigateHistory(-1);}
+    exec: function(editor) {return editor.repl.navigateHistory(-1);},
+    scrollIntoView: "center-animate"
 }, {
     name: "prevCell",
     bindKey: {mac: "cmd-up", win: "ctrl-up"},
-    exec: function(editor) {return editor.repl.moveByCells(-1, null, "input");}
+    exec: function(editor) {return editor.repl.moveByCells(-1, null, "input");},
+    scrollIntoView: "center-animate"
 }, {
     name: "nextCell",
     bindKey: {mac: "cmd-down", win: "ctrl-down"},
-    exec: function(editor) {return editor.repl.moveByCells(1, null, "input");}
+    exec: function(editor) {return editor.repl.moveByCells(1, null, "input");},
+    scrollIntoView: "center-animate"
 }, {
     name: "firstCell",
     bindKey: {mac: "alt-up|ctrl-home", win: "ctrl-home"},
-    exec: function(editor) {return editor.repl.moveByCells("first", null, "input");}
+    exec: function(editor) {return editor.repl.moveByCells("first", null, "input");},
+    scrollIntoView: "center-animate"
 }, {
     name: "lastCell",
     bindKey: {mac: "alt-down|ctrl-end", win: "ctrl-end"},
-    exec: function(editor) {return editor.repl.moveByCells("last", null, "input");}
+    exec: function(editor) {return editor.repl.moveByCells("last", null, "input");},
+    scrollIntoView: "center-animate"
 }, {
     name: "clear",
     bindKey: {mac: "cmd-k", win: "Alt-k"},
-    exec: function(editor) {return editor.repl.clear();}
+    exec: function(editor) {return editor.repl.clear();},
+    scrollIntoView: "center-animate"
 }, {
     name: "removeOutputCell",
     bindKey: {mac: "Shift-delete", win: "Shift-delete"},
-    exec: function(editor) {return editor.repl.removeOutputCell();}
+    exec: function(editor) {return editor.repl.removeOutputCell();},
+    scrollIntoView: "cursor"
 }, {
     name: "newInputCell",
     bindKey: {mac: "ctrl-insert", win: "ctrl-insert"},
-    exec: function(editor) { editor.repl.insertCell();}
+    exec: function(editor) { editor.repl.insertCell();},
+    scrollIntoView: "center-animate"
 }]);
 
 
