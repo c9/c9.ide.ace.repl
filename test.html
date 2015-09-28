@@ -16,21 +16,18 @@
 </head>
 <body>
 <div id="editor"></div>
-<script type="text/javascript">
-    var require = {
-        baseUrl: "",
-        paths: {
-            ace: "../../lib/ace",
-            repl_demo: "."
-        }
-    };
-</script>
-<script src="../kitchen-sink/require.js" data-main="./test"></script>
-<script src="../../build/ace.js"></script>
 
-<form action="" enctype="multipart/form-data" method="POST" style="visibility:hidden">
-    <input type="file" name="upfile">
-    <input type="submit" value="Press">
-</form>
+<script src="/static/mini_require.js"></script>
+<script src="/configs/require_config.js"></script>
+<script src="/static/test.js"></script>
+    
+<script>
+require(["ace/ace", "plugins/c9.ide.ace.repl/repl", "plugins/c9.ide.ace.repl/notebook"], function(ace, repl, nb) {
+    editor = ace.edit("editor")
+    editor.session.setMode(new nb.Mode)
+    editor.commands.addCommands(nb.commands)
+});
+</script>
+
 </body>
 </html>
