@@ -64,7 +64,7 @@ require("ace/multi_select").MultiSelect(editor);
 editor.session.setUndoManager(new UndoManager)
 
 editor.on("click", function(e) {
-    if (e.domEvent.target.className == "ace_button") {
+    if (e.domEvent.target.className == "ace_repl_button") {
         var pos = e.getDocumentPosition()
         var input = document.forms[0].upfile
         input.onchange = function() {

@@ -1,4 +1,4 @@
-.ace_button {
+.ace_repl_button {
     border: 1px solid lightgray;
     color: lightcoral;
     display: inline-block;
@@ -7,7 +7,7 @@
     pointer-events: auto;
     cursor: pointer
 }
-.ace_button:hover {
+.ace_repl_button:hover {
     border: 1px solid gray;
     background: rgba(200,200,200,0.2);
     display: inline-block;
