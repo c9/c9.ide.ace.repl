@@ -47,7 +47,7 @@ dom.importCssString(css, "ace_repl");
 
 var replCommands = new HashHandler([{
     name: "newLine",
-    bindKey: {win: "Shift-Return|Alt-Enter", mac: "Shift-Return|Alt-Enter"},
+    bindKey: { win: "Shift-Return|Alt-Enter", mac: "Shift-Return|Alt-Enter" },
     exec: function(editor) {editor.insert("\n");},
     scrollIntoView: "cursor"
 }, {
@@ -72,37 +72,37 @@ var replCommands = new HashHandler([{
     scrollIntoView: "center-animate"
 }, {
     name: "prevCell",
-    bindKey: {mac: "cmd-up", win: "ctrl-up"},
+    bindKey: { mac: "cmd-up", win: "ctrl-up" },
     exec: function(editor) {return editor.repl.moveByCells(-1, null, "input");},
     scrollIntoView: "center-animate"
 }, {
     name: "nextCell",
-    bindKey: {mac: "cmd-down", win: "ctrl-down"},
+    bindKey: { mac: "cmd-down", win: "ctrl-down" },
     exec: function(editor) {return editor.repl.moveByCells(1, null, "input");},
     scrollIntoView: "center-animate"
 }, {
     name: "firstCell",
-    bindKey: {mac: "alt-up|ctrl-home", win: "ctrl-home"},
+    bindKey: { mac: "alt-up|ctrl-home", win: "ctrl-home" },
     exec: function(editor) {return editor.repl.moveByCells("first", null, "input");},
     scrollIntoView: "center-animate"
 }, {
     name: "lastCell",
-    bindKey: {mac: "alt-down|ctrl-end", win: "ctrl-end"},
+    bindKey: { mac: "alt-down|ctrl-end", win: "ctrl-end" },
     exec: function(editor) {return editor.repl.moveByCells("last", null, "input");},
     scrollIntoView: "center-animate"
 }, {
     name: "clear",
-    bindKey: {mac: "cmd-k", win: "Alt-k"},
+    bindKey: { mac: "cmd-k", win: "Alt-k" },
     exec: function(editor) {return editor.repl.clear();},
     scrollIntoView: "center-animate"
 }, {
     name: "removeOutputCell",
-    bindKey: {mac: "Shift-delete", win: "Shift-delete"},
+    bindKey: { mac: "Shift-delete", win: "Shift-delete" },
     exec: function(editor) {return editor.repl.removeOutputCell();},
     scrollIntoView: "cursor"
 }, {
     name: "newInputCell",
-    bindKey: {mac: "ctrl-insert", win: "ctrl-insert"},
+    bindKey: { mac: "ctrl-insert", win: "ctrl-insert" },
     exec: function(editor) { editor.repl.insertCell();},
     scrollIntoView: "center-animate"
 }]);
@@ -132,12 +132,12 @@ var Repl = function(session, options) {
     session.repl = this;
 
     session.replCells = [];
-    var pos = {row: session.getLength(), column: 0};
+    var pos = { row: session.getLength(), column: 0 };
     if (!session.getValue() && options.message)
         pos = session.insert(pos, options.message);
     if (session.getValue())
-        this.insertCell({row:0, column:0}, {type:"start"}, true);
-    var last = this.insertCell(pos, {type: "input"});
+        this.insertCell({ row: 0, column: 0 }, { type: "start" }, true);
+    var last = this.insertCell(pos, { type: "input" });
     this.select(last.range.end);
     
 
@@ -145,13 +145,13 @@ var Repl = function(session, options) {
         session.getFoldWidget = function(row) {
             if (!session.replCells[row])
                 return;
-            if (session.replCells[row+1])
+            if (session.replCells[row + 1])
                 return;
-            if (row == session.replCells.length-1)
+            if (row == session.replCells.length - 1)
                 return;
             if (session.replCells[row].lineWidget)
                 return;
-            return  "start";
+            return "start";
         };
         session.getFoldWidgetRange = function(row) {
             return session.repl.getCellAt(row).range;
@@ -177,7 +177,7 @@ var Repl = function(session, options) {
         var screenRows = 0;
         this.lineWidgets.forEach(function(w) {
             if (w && w.rowCount)
-                screenRows +=w.rowCount;
+                screenRows += w.rowCount;
         });
         return screenRows;
     };
@@ -223,7 +223,7 @@ var Repl = function(session, options) {
             return row + "";
         },
         getWidth: function(session, lastLineNumber, config) {
-            var chars = Math.max(lastLineNumber.toString().length, session.maxPromptLength||0);
+            var chars = Math.max(lastLineNumber.toString().length, session.maxPromptLength || 0);
             return chars * config.characterWidth;
         }
     };
@@ -277,7 +277,7 @@ var Repl = function(session, options) {
         var command = e.command;
         var cell = editor.repl.getCurrentCell();
         if (!editor.curReplOp)
-            editor.curReplOp = {command: command, cell: cell};
+            editor.curReplOp = { command: command, cell: cell };
             
         if (command.isRepl)
             return;
@@ -423,9 +423,9 @@ var Repl = function(session, options) {
     };
     this.getCellAt = function(pos) {
         if (pos == undefined)
-            pos = {row: this.session.getLength(), column: 0};
+            pos = { row: this.session.getLength(), column: 0 };
         else if (typeof pos == "number")
-            pos = {row: pos, column: 0};
+            pos = { row: pos, column: 0 };
         
         var cells = this.session.replCells;
 
@@ -487,7 +487,7 @@ var Repl = function(session, options) {
         return cell;
     };
     
-    this.removeOutputCell = function(cell)  {
+    this.removeOutputCell = function(cell) {
         cell = cell || this.getCurrentCell();
         if (cell && cell.type == "input")
             cell = cell.output;
@@ -495,7 +495,7 @@ var Repl = function(session, options) {
             this.removeCell(cell);
     };
     
-    this.removeCell = function(cell)  {
+    this.removeCell = function(cell) {
         var range = cell.getRange().clone();
         range.start.row--;
         range.start.column = this.session.getLine(range.start.row).length;
@@ -508,10 +508,10 @@ var Repl = function(session, options) {
     };
     
     this.ensureLastInputCell = function() {
-        var end = {row: this.session.getLength(), column: 0};
+        var end = { row: this.session.getLength(), column: 0 };
         var cell = this.getCellAt(end);
         if (!cell || cell.type != "input") {
-            this.insertCell(end, {type: "input"}, true);
+            this.insertCell(end, { type: "input" }, true);
         }
     };
     
@@ -535,7 +535,7 @@ var Repl = function(session, options) {
             this.session.getUndoManager().reset();
             
             if (!cell.output || !cell.output.session) {
-                cell.output = this.insertCell(cell.range.end, {type: "output"});                
+                cell.output = this.insertCell(cell.range.end, { type: "output" });                
                 var newCell = this.getSiblingCell(1, cell.output);
             }
             this.history.add(str);
@@ -553,7 +553,7 @@ var Repl = function(session, options) {
                 renderer.scrollCursorIntoView();
             });
             if (success !== false && newCell && newCell.type != "input") {
-                newCell = this.insertCell(cell.output.range.end, {type: "input"});
+                newCell = this.insertCell(cell.output.range.end, { type: "input" });
                 this.session.selection.setRange(newCell.range);
             }
             if (cell.output.waiting) {
@@ -568,7 +568,7 @@ var Repl = function(session, options) {
     this.insertCell = function(pos, options, allowSplit) {
         pos = pos || this.session.selection.getCursor();
         if (!options)
-            options = {type: "input"};
+            options = { type: "input" };
 
         var cell = !allowSplit && this.getCellAt(pos);
 
@@ -708,7 +708,7 @@ var Repl = function(session, options) {
         if (w.rowCount == null)
             w.rowCount = w.pixelHeight / renderer.layerConfig.lineHeight;
         
-        this.session._emit("changeFold", {data:{start:{row: w.row}}});
+        this.session._emit("changeFold", { data: { start: { row: w.row }}});
         
         this.$updateSession();
         this.updateWidgets(null, renderer);
@@ -722,7 +722,7 @@ var Repl = function(session, options) {
         if (w.editor && w.editor.destroy) try {
             w.editor.destroy();
         } catch (e) {}
-        this.session._emit("changeFold", {data:{start:{row: w.row}}});
+        this.session._emit("changeFold", { data: { start: { row: w.row }}});
         this.$updateSession();
     };
     
@@ -762,7 +762,7 @@ var Repl = function(session, options) {
             }
         }
         if (min != Infinity) {
-            this.session._emit("changeFold", {data:{start:{row: min}}});
+            this.session._emit("changeFold", { data: { start: { row: min }}});
             this.session.lineWidgetWidth = null;
         }
         this.session._changedWidgets = [];
@@ -792,7 +792,7 @@ var Repl = function(session, options) {
                 w._inDocument = true;
                 renderer.container.appendChild(w.el);
             }
-            var top = renderer.$cursorLayer.getPixelPosition({row: i, column:0}, true).top;
+            var top = renderer.$cursorLayer.getPixelPosition({ row: i, column: 0 }, true).top;
             if (!w.coverLine)
                 top += config.lineHeight * this.session.getRowLineCount(w.row);
             w.el.style.top = top - config.offset + "px";
@@ -858,7 +858,7 @@ History.prototype = {
 
 
 function clonePos(pos) {
-    return {row: pos.row, column: pos.column};
+    return { row: pos.row, column: pos.column };
 }
 function setPos(pos, newPos) {
     pos.row = newPos.row;

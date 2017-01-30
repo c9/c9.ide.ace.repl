@@ -69,7 +69,7 @@ var ReplCell = function(options, session) {
             return;
         this.promptType = type;
         this.prompt = (str || "") + "   ";
-        this.session.maxPromptLength = Math.max(this.session.maxPromptLength||0, this.prompt.length);
+        this.session.maxPromptLength = Math.max(this.session.maxPromptLength || 0, this.prompt.length);
     };
     
     this.setValue = function(val, selection) {
@@ -83,9 +83,9 @@ var ReplCell = function(options, session) {
         var pos = this.session.doc.replace(this.range, val);
         this.range.setEnd(pos);
         if (selection == 1)
-            this.session.selection.setRange({start: this.range.end, end: this.range.end});
+            this.session.selection.setRange({ start: this.range.end, end: this.range.end });
         else if (selection == -1)
-            this.session.selection.setRange({start: this.range.start, end: this.range.start});
+            this.session.selection.setRange({ start: this.range.start, end: this.range.start });
     };
     this.getValue = function() {
         if (!this.session)
@@ -109,11 +109,11 @@ var ReplCell = function(options, session) {
         if (!cell)
             return;
         cell.row = i;
-        for (var i = row+1; i < this.session.getLength(); i++) {
+        for (var i = row + 1; i < this.session.getLength(); i++) {
             if (cells[i])
                 break;
         }
-        cell.endRow = i-1;
+        cell.endRow = i - 1;
         cell.range = new Range(cell.row, 0, cell.endRow, Number.MAX_VALUE);
         
         return this.range;

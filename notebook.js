@@ -16,9 +16,9 @@ foldMode.getFoldWidgetRange = function(session, foldStyle, row) {
 
 		if (match[1]) {
 			var cell = session.$mode.getCellBounds(row);
-			var start = {row: row, column: session.$mode.dl};
-			var end = {row: cell.bodyEnd, column: session.getLine(cell.bodyEnd).length};
-			var placeholder = session.getLine(cell.headerStart).slice(0,10) + "=====================";
+			var start = { row: row, column: session.$mode.dl };
+			var end = { row: cell.bodyEnd, column: session.getLine(cell.bodyEnd).length };
+			var placeholder = session.getLine(cell.headerStart).slice(0, 10) + "=====================";
 			range = Range.fromPoints(start, end);
 			range.placeholder = placeholder;
 			return range;
@@ -30,7 +30,7 @@ foldMode.getFoldWidgetRange = function(session, foldStyle, row) {
 			return range;
 		}
 
-		var start = {row: row, column: i+1};
+		var start = { row: row, column: i + 1 };
 		var end = session.$findClosingBracket(match[2], start);
 		if (!end)
 			return;
@@ -64,18 +64,18 @@ dom.importCssString("\
 
 var commands = [{
     name: "newCell",
-    bindKey: {win: "Shift-Return", mac: "Shift-Return"},
+    bindKey: { win: "Shift-Return", mac: "Shift-Return" },
     exec: function(editor) {
         var session = editor.session;
         var c = editor.getCursorPosition();
         var end = session.insert(c, c.column == 0 ? "#>>" : "\n#>>");
         
-        var addNewLine = (c.column!= 0 || c.row==0) 
+        var addNewLine = (c.column != 0 || c.row == 0) 
             && c.column != session.getLine(c.row).length;
 
         if (addNewLine) {
-            session.insert(end,"\n");
-            editor.selection.setSelectionRange({start:end, end:end});
+            session.insert(end, "\n");
+            editor.selection.setSelectionRange({ start: end, end: end });
         }
     }
 }];
@@ -92,10 +92,10 @@ var jsMode = modes.js;
 var tk = {};
 var delimiter = '#>>';
 var dl = delimiter.length;
-function testLang(lang, fullName){
-	lang=lang.toLowerCase();
-	fullName=fullName.toLowerCase();
-	var lastI=0;
+function testLang(lang, fullName) {
+	lang = lang.toLowerCase();
+	fullName = fullName.toLowerCase();
+	var lastI = 0;
 	for (var j = 0, ftLen = lang.length; j < ftLen; j++) {
 		lastI = fullName.indexOf(lang[j], lastI);
 		if (lastI === -1)
@@ -105,45 +105,45 @@ function testLang(lang, fullName){
 	return true;
 }
 var states = {};
-var $getState = function(state, lang, isHeader){
+var $getState = function(state, lang, isHeader) {
     var g = lang + state + isHeader;
-    return states[g] || (states[g] = {state:state, lang:lang, isHeader:isHeader});
+    return states[g] || (states[g] = { state: state, lang: lang, isHeader: isHeader });
 };
 tk.getLineTokens = function(line, startState) {
-	var match,lang,isHeader = 0;
+	var match, lang, isHeader = 0;
 	if (typeof startState == 'object') {
 		lang = startState.lang;
-		isHeader = startState.isHeader||0;
-		startState = startState.state||"start";
+		isHeader = startState.isHeader || 0;
+		startState = startState.state || "start";
 	} else {
 		lang = 'js';
 	}
 
 	if (line.substr(0, dl) == delimiter) {
 		var index = dl;
-		var type = !isHeader?'firstcell.':'';
-		var tok = [{type:type+'cellHead', value: delimiter}];
+		var type = !isHeader ? 'firstcell.' : '';
+		var tok = [{ type: type + 'cellHead', value: delimiter }];
 		if ((match = line.match(/lang\s*=\s*(\w+)\b/))) {
-			lang = testLang(match[1],'coffeeScript')?'coffee':'js';
+			lang = testLang(match[1], 'coffeeScript') ? 'coffee' : 'js';
 
 			if (dl < match.index) {
-				tok.push({type:type, value:line.substring(dl, match.index)});
+				tok.push({ type: type, value: line.substring(dl, match.index) });
 			}
-			tok.push({type: type+'comment.doc', value:match[0]});
+			tok.push({ type: type + 'comment.doc', value: match[0] });
 			index = match.index + match[0].length;
 		}
-		tok.push({type:type, value:line.substr(index)});
+		tok.push({ type: type, value: line.substr(index) });
 		
 		if (!isHeader) {
-			tok.push({type:'filler', value:' '});
+			tok.push({ type: 'filler', value: ' ' });
 		}
 		ans = {
-			tokens : tok,
-			state : $getState("start", lang, isHeader + 1)
+			tokens: tok,
+			state: $getState("start", lang, isHeader + 1)
 		};
 	}
 	else {	
-		var ans = (modes[lang]||jsMode).getTokenizer().getLineTokens(line, startState);
+		var ans = (modes[lang] || jsMode).getTokenizer().getLineTokens(line, startState);
 		ans.state = $getState(ans.state, lang);
 	}
 	return ans;
@@ -164,7 +164,7 @@ oop.inherits(Mode, TextMode);
 		
 		// go to header end if row is inside header
 		var line = lines[row];
-		while (line && line.substr(0,dl) == delimiter) {
+		while (line && line.substr(0, dl) == delimiter) {
 			line = lines[++row];
 		}
 		if (!line)
@@ -172,33 +172,33 @@ oop.inherits(Mode, TextMode);
 
 		// read up to header
 		var i = row;
-		while (line != null){
-			if (line.substr(0,dl) == delimiter)
+		while (line != null) {
+			if (line.substr(0, dl) == delimiter)
 				break;
 			line = lines[--i];
 		}
-		var minI = i+1;
+		var minI = i + 1;
 		
 		// read header
 		while (line != null) {
-			if (line.substr(0,dl) != delimiter)
+			if (line.substr(0, dl) != delimiter)
 				break;
 			line = lines[--i];
 		}		
-		var headerI = i+1;
+		var headerI = i + 1;
 		// read rest of the body
 		i = row + 1;
 		line = lines[i];
 		while (line != null) {
-			if (line.substr(0, dl)==delimiter)
+			if (line.substr(0, dl) == delimiter)
 				break;
 			line = lines[++i];
 		}
-		var maxI = i-1;
+		var maxI = i - 1;
 
 		return {
 			headerStart: headerI,
-			headerEnd: minI-1,
+			headerEnd: minI - 1,
 			bodyStart: minI,
 			bodyEnd: maxI,
 			cursor: cur
@@ -208,7 +208,7 @@ oop.inherits(Mode, TextMode);
 	this.getHeaderText = function(cell) {
 		if (cell) {
 			cell.headerText = cell.header.join('\n')
-					.replace(/lang\s*=\s*(\w+)\b/g,'')
+					.replace(/lang\s*=\s*(\w+)\b/g, '')
 					.replace(delimiter, '', 'g')
 					.trim();
 			return cell;
@@ -229,7 +229,7 @@ oop.inherits(Mode, TextMode);
 		return cell;			
 	};
 	
-	this.setCellText = function(text, editor){
+	this.setCellText = function(text, editor) {
 		var cursor = editor.getCursorPosition();
 		var session = editor.session;
 		
@@ -240,7 +240,7 @@ oop.inherits(Mode, TextMode);
 			var range = new Range(cell.bodyEnd, end, cell.bodyEnd, end);
 			text = '\n' + text;
 		} else
-			var range = new Range(cell.bodyStart, 0, cell.bodyEnd, end)
+			var range = new Range(cell.bodyStart, 0, cell.bodyEnd, end);
 		
 		session.replace(range, text);
 		return text;
@@ -248,19 +248,19 @@ oop.inherits(Mode, TextMode);
 	
 	
     this.toggleCommentLines = function(state, doc, startRow, endRow) {
-		(modes[state.lang]||jsMode).toggleCommentLines(state.state, doc, startRow, endRow);
+		(modes[state.lang] || jsMode).toggleCommentLines(state.state, doc, startRow, endRow);
     };
 
     this.getNextLineIndent = function(state, line, tab, lineEnd) {
-        return (modes[state.lang]||jsMode).getNextLineIndent(state.state, line, tab, lineEnd);
+        return (modes[state.lang] || jsMode).getNextLineIndent(state.state, line, tab, lineEnd);
     };
 
     this.checkOutdent = function(state, line, input) {
-        return (modes[state.lang]||jsMode).checkOutdent(state.state, line, input);
+        return (modes[state.lang] || jsMode).checkOutdent(state.state, line, input);
     };
 
     this.autoOutdent = function(state, doc, row) {
-        return (modes[state.lang]||jsMode).autoOutdent(state.state, doc, row);
+        return (modes[state.lang] || jsMode).autoOutdent(state.state, doc, row);
     };
     
     this.createWorker = function(session) {
@@ -268,7 +268,7 @@ oop.inherits(Mode, TextMode);
     };
 	
 	this.transformAction = function(state, action, editor, session, param) {
-        return (modes[state.lang]||jsMode).transformAction(state.state, action, editor, session, param);
+        return (modes[state.lang] || jsMode).transformAction(state.state, action, editor, session, param);
     };
 
 }).call(Mode.prototype);

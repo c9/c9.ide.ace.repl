@@ -34,7 +34,7 @@ define(function(require, exports, module) {
 
 require("ace/lib/fixoldbrowsers");
 require("ace/config").set("packaged", false);
-require("ace/line_widgets")
+require("ace/line_widgets");
 
 var dom = require("ace/lib/dom");
 var net = require("ace/lib/net");
@@ -61,26 +61,26 @@ var container = document.getElementById("editor");
 var editor = new Editor(new Renderer(container));
 require("ace/multi_select").MultiSelect(editor);
 
-editor.session.setUndoManager(new UndoManager)
+editor.session.setUndoManager(new UndoManager);
 
 editor.on("click", function(e) {
     if (e.domEvent.target.className == "ace_repl_button") {
-        var pos = e.getDocumentPosition()
-        var input = document.forms[0].upfile
+        var pos = e.getDocumentPosition();
+        var input = document.forms[0].upfile;
         input.onchange = function() {
-            editor.session.insert(pos, "\x01" + input.value + "\x02")
-        }
-        input.click()
+            editor.session.insert(pos, "\x01" + input.value + "\x02");
+        };
+        input.click();
     }
-})
-window.editor = editor
+});
+window.editor = editor;
 
 
 
 require("./repl").Repl.fromEditor(editor, {
     mode: "logiql_command_mode",
     evaluator: new (require("./evaluator").Evaluator)
-})
+});
 
 
 /*********** manage layout ***************************/

@@ -45,41 +45,41 @@ var Evaluator = function() {
 
     this.evaluate = function(str, cell, cb) {
         if (/table|ace/.test(str)) {
-            cb("")
-            var editor = new Editor(new Renderer)
-            editor.setValue("command " + str)
+            cb("");
+            var editor = new Editor(new Renderer);
+            editor.setValue("command " + str);
             editor.container.addEventListener("mousedown", function(e) {
-                e.stopPropagation()
-            })
-            cell.addWidget({rowCount: 8, el:editor.container, editor: editor})
-            setTimeout(function(){
-                editor.resize(true)
-            }, 80)
+                e.stopPropagation();
+            });
+            cell.addWidget({ rowCount: 8, el: editor.container, editor: editor });
+            setTimeout(function() {
+                editor.resize(true);
+            }, 80);
         } else if (/repl/.test(str)) {
-            cb("")
-            var editor = new Editor(new Renderer)
+            cb("");
+            var editor = new Editor(new Renderer);
             cell.session.repl.constructor.fromEditor(editor, {
                 mode: "repl_demo/logiql_command_mode",
                 evaluator: this,
                 message: "welcome to inner Repl!"
-            })
+            });
 
             editor.container.addEventListener("mousedown", function(e) {
-                e.stopPropagation()
-            })
-            cell.addWidget({rowCount: 12, el:editor.container, editor: editor})
-            setTimeout(function(){
-                editor.resize(true)
-            }, 80)
+                e.stopPropagation();
+            });
+            cell.addWidget({ rowCount: 12, el: editor.container, editor: editor });
+            setTimeout(function() {
+                editor.resize(true);
+            }, 80);
         } else if (/logo/.test(str)) {
             setTimeout(function() {
-                cb("")
-                cell.addWidget({rowCount: 6, html:"<img src='http://martin.bravenboer.name/logo-trans-85.png'>"})
+                cb("");
+                cell.addWidget({ rowCount: 6, html: "<img src='http://martin.bravenboer.name/logo-trans-85.png'>" });
             }, 300);
         } else if (/lorem/.test(str)) {
-            var a = []
+            var a = [];
             for (var i = 0; i < 100; i++) {
-                a.push(i)
+                a.push(i);
             }
             cb(a.join("\n"));
         } else if (/\n|slow/.test(str)) {
@@ -93,4 +93,4 @@ var Evaluator = function() {
 }).call(Evaluator.prototype);
 exports.Evaluator = Evaluator;
 
-})
+});

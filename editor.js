@@ -12,7 +12,7 @@ define(function(require, exports, module) {
         
         var extensions = [];
                           
-        function ReplEditor(){
+        function ReplEditor() {
             var Baseclass = editors.findEditor("ace");
             var plugin = new Baseclass(true, []);
             // var emit = plugin.getEmitter();
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
             
             /***** Lifecycle *****/
             
-            plugin.on("load", function(){
+            plugin.on("load", function() {
             });
             
             plugin.on("documentLoad", function(e) {
@@ -59,15 +59,15 @@ define(function(require, exports, module) {
             });
             plugin.on("setState", function(e) {
             });
-            plugin.on("clear", function(){
+            plugin.on("clear", function() {
             });
-            plugin.on("focus", function(){
+            plugin.on("focus", function() {
             });
-            plugin.on("enable", function(){
+            plugin.on("enable", function() {
             });
-            plugin.on("disable", function(){
+            plugin.on("disable", function() {
             });
-            plugin.on("unload", function(){
+            plugin.on("unload", function() {
             });
             
             /***** Register and define API *****/
